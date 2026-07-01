@@ -14,9 +14,9 @@ const ROLES: {
   tone: string;
 }[] = [
   { role: "admin", email: "arya@resto.id", label: "Admin / Manajer", desc: "Kelola data & laporan", icon: "◈", soft: "bg-accentsoft", tone: "text-accent" },
-  { role: "kasir", email: "budi@resto.id", label: "Kasir", desc: "Pembayaran & struk", icon: "◆", soft: "bg-brandsoft", tone: "text-brandd" },
+  { role: "kasir", email: "denhanif@resto.id", label: "Kasir", desc: "Pembayaran & struk", icon: "◆", soft: "bg-brandsoft", tone: "text-brandd" },
   { role: "pelayan", email: "rafly@resto.id", label: "Pelayan", desc: "Buka meja & catat pesanan", icon: "☰", soft: "bg-ambersoft", tone: "text-amber" },
-  { role: "koki", email: "sari@resto.id", label: "Koki", desc: "Antrian dapur", icon: "☲", soft: "bg-bg2", tone: "text-ink" },
+  { role: "koki", email: "faiz@resto.id", label: "Koki", desc: "Antrian dapur", icon: "☲", soft: "bg-bg2", tone: "text-ink" },
 ];
 
 export default function LoginPage() {

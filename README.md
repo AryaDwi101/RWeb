@@ -31,9 +31,9 @@ npm run dev                            # web di http://localhost:3000
 | Peran | Email |
 |-------|-------|
 | Admin / Manajer | arya@resto.id |
-| Kasir | budi@resto.id |
+| Kasir | denhanif@resto.id |
 | Pelayan | rafly@resto.id |
-| Koki | sari@resto.id |
+| Koki | faiz@resto.id |
 
 ## Alur singkat
 Pelayan **buka meja** → **catat pesanan** (Kirim ke Dapur) → Koki **proses** (Antrian→Dimasak→Siap) → Pelayan **antar** → Kasir **proses pembayaran** → struk & sesi ditutup. Admin kelola menu/meja/pengguna & lihat laporan.

@@ -22,9 +22,9 @@ class DatabaseSeeder extends Seeder
         $pwd = Hash::make('password');
         $users = [
             ['name' => 'Arya Dwikuncoro',            'email' => 'arya@resto.id',  'role' => 'admin',   'status' => 'aktif'],
-            ['name' => 'Faiz Saddam Rafly Mulia',    'email' => 'budi@resto.id',  'role' => 'kasir',   'status' => 'aktif'],
+            ['name' => 'Den Hanif',                  'email' => 'denhanif@resto.id', 'role' => 'kasir',   'status' => 'aktif'],
             ['name' => 'Den Hanief Lanient Ibrahim', 'email' => 'rafly@resto.id', 'role' => 'pelayan', 'status' => 'aktif'],
-            ['name' => 'Sari Dewi',                  'email' => 'sari@resto.id',  'role' => 'koki',    'status' => 'aktif'],
+            ['name' => 'Faiz',                       'email' => 'faiz@resto.id',  'role' => 'koki',    'status' => 'aktif'],
             ['name' => 'Niko Wijaya',                'email' => 'niko@resto.id',  'role' => 'pelayan', 'status' => 'nonaktif'],
         ];
         $U = [];
