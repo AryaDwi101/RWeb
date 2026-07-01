@@ -1,0 +1,11 @@
+## OS
+.DS_Store
+Thumbs.db
+
+## Editors
+.vscode/
+.idea/
+
+## AI assistant tooling (local only, not part of the project)
+.claude/
+CLAUDE.md
