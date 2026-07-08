@@ -14,6 +14,7 @@ export default function Kategori() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState({ ...empty });
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   const load = () => apiGet<Cat[]>("/categories").then(setCats);
   useEffect(() => {
@@ -23,17 +24,20 @@ export default function Kategori() {
   const openCreate = () => {
     setEditingId(null);
     setForm({ ...empty });
+    setError("");
     setShow(true);
   };
 
   const openEdit = (c: Cat) => {
     setEditingId(c.id);
     setForm({ name: c.name, color: c.color ?? "#16a34a" });
+    setError("");
     setShow(true);
   };
 
   const save = async () => {
     setSaving(true);
+    setError("");
     try {
       if (editingId) {
         await apiPut(`/categories/${editingId}`, form);
@@ -44,6 +48,8 @@ export default function Kategori() {
       setEditingId(null);
       setForm({ ...empty });
       load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Gagal menyimpan kategori.");
     } finally {
       setSaving(false);
     }
@@ -51,8 +57,12 @@ export default function Kategori() {
 
   const del = async (c: Cat) => {
     if (!confirm(`Hapus kategori "${c.name}"?`)) return;
-    await apiDelete(`/categories/${c.id}`);
-    load();
+    try {
+      await apiDelete(`/categories/${c.id}`);
+      load();
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Gagal menghapus kategori.");
+    }
   };
 
   return (
@@ -71,25 +81,28 @@ export default function Kategori() {
       </div>
 
       {show && (
-        <div className="bg-card border border-line rounded-xl p-4 mb-4 flex gap-3 items-end">
-          <Field label="Nama">
-            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="inp" />
-          </Field>
-          <Field label="Warna">
-            <input
-              value={form.color}
-              onChange={(e) => setForm({ ...form, color: e.target.value })}
-              type="color"
-              className="inp h-10 w-16 p-1"
-            />
-          </Field>
-          <button
-            onClick={save}
-            disabled={saving || !form.name}
-            className="h-10 px-4 rounded-lg bg-brand text-white text-sm font-bold disabled:opacity-50"
-          >
-            {editingId ? "Simpan Perubahan" : "Simpan"}
-          </button>
+        <div className="bg-card border border-line rounded-xl p-4 mb-4">
+          <div className="flex gap-3 items-end">
+            <Field label="Nama">
+              <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="inp" />
+            </Field>
+            <Field label="Warna">
+              <input
+                value={form.color}
+                onChange={(e) => setForm({ ...form, color: e.target.value })}
+                type="color"
+                className="inp h-10 w-16 p-1"
+              />
+            </Field>
+            <button
+              onClick={save}
+              disabled={saving || !form.name}
+              className="h-10 px-4 rounded-lg bg-brand text-white text-sm font-bold disabled:opacity-50"
+            >
+              {editingId ? "Simpan Perubahan" : "Simpan"}
+            </button>
+          </div>
+          {error && <p className="mt-2 text-xs text-redx font-medium">{error}</p>}
         </div>
       )}
 

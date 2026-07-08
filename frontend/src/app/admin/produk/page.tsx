@@ -31,6 +31,7 @@ export default function Produk() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState({ ...empty });
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   const load = () => apiGet<Product[]>("/products").then(setItems);
   useEffect(() => {
@@ -41,6 +42,7 @@ export default function Produk() {
   const openCreate = () => {
     setEditingId(null);
     setForm({ ...empty });
+    setError("");
     setShow(true);
   };
 
@@ -53,17 +55,23 @@ export default function Produk() {
       category_id: p.category_id ? String(p.category_id) : "",
       status: p.status,
     });
+    setError("");
     setShow(true);
   };
 
   const del = async (p: Product) => {
     if (!confirm(`Hapus produk "${p.name}"?`)) return;
-    await apiDelete(`/products/${p.id}`);
-    load();
+    try {
+      await apiDelete(`/products/${p.id}`);
+      load();
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Gagal menghapus produk.");
+    }
   };
 
   const save = async () => {
     setSaving(true);
+    setError("");
     try {
       const body = {
         name: form.name,
@@ -81,6 +89,8 @@ export default function Produk() {
       setEditingId(null);
       setShow(false);
       load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Gagal menyimpan produk.");
     } finally {
       setSaving(false);
     }
@@ -132,6 +142,7 @@ export default function Produk() {
               {editingId ? "Simpan Perubahan" : "Simpan"}
             </button>
           </div>
+          {error && <p className="col-span-5 text-xs text-redx font-medium">{error}</p>}
         </div>
       )}
 

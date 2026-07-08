@@ -14,6 +14,7 @@ export default function Pengguna() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState({ ...empty });
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   const load = () => apiGet<User[]>("/users").then(setUsers);
   useEffect(() => {
@@ -23,17 +24,20 @@ export default function Pengguna() {
   const openCreate = () => {
     setEditingId(null);
     setForm({ ...empty });
+    setError("");
     setShow(true);
   };
 
   const openEdit = (u: User) => {
     setEditingId(u.id);
     setForm({ name: u.name, email: u.email, role: u.role, status: u.status, password: "" });
+    setError("");
     setShow(true);
   };
 
   const save = async () => {
     setSaving(true);
+    setError("");
     try {
       if (editingId) {
         const body: Partial<typeof form> = { ...form };
@@ -46,6 +50,8 @@ export default function Pengguna() {
       setEditingId(null);
       setForm({ ...empty });
       load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Gagal menyimpan pengguna.");
     } finally {
       setSaving(false);
     }
@@ -111,6 +117,7 @@ export default function Pengguna() {
           >
             {editingId ? "Simpan Perubahan" : "Simpan"}
           </button>
+          {error && <p className="col-span-5 text-xs text-redx font-medium">{error}</p>}
         </div>
       )}
 

@@ -21,6 +21,7 @@ export default function Meja() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState({ ...empty });
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   const load = () => apiGet<Table[]>("/tables").then(setTables);
   useEffect(() => {
@@ -30,17 +31,20 @@ export default function Meja() {
   const openCreate = () => {
     setEditingId(null);
     setForm({ ...empty });
+    setError("");
     setShow(true);
   };
 
   const openEdit = (t: Table) => {
     setEditingId(t.id);
     setForm({ number: t.number, area: t.area, capacity: String(t.capacity), status: t.status });
+    setError("");
     setShow(true);
   };
 
   const save = async () => {
     setSaving(true);
+    setError("");
     try {
       const body = { ...form, capacity: parseInt(form.capacity || "1") };
       if (editingId) {
@@ -52,6 +56,8 @@ export default function Meja() {
       setEditingId(null);
       setForm({ ...empty });
       load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Gagal menyimpan meja.");
     } finally {
       setSaving(false);
     }
@@ -59,8 +65,12 @@ export default function Meja() {
 
   const del = async (t: Table) => {
     if (!confirm(`Hapus meja "${t.number}"?`)) return;
-    await apiDelete(`/tables/${t.id}`);
-    load();
+    try {
+      await apiDelete(`/tables/${t.id}`);
+      load();
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Gagal menghapus meja.");
+    }
   };
 
   const cols = "grid-cols-[0.6fr_1.4fr_2fr_1fr_1fr_1fr]";
@@ -110,6 +120,7 @@ export default function Meja() {
           >
             {editingId ? "Simpan Perubahan" : "Simpan"}
           </button>
+          {error && <p className="col-span-5 text-xs text-redx font-medium">{error}</p>}
         </div>
       )}
 
